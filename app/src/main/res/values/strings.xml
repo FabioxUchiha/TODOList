@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TODO List</string>
+    <string name="a_adir">Añadir</string>
+    <string name="ingrese_una_nueva_tarea">ingrese una nueva tarea</string>
 </resources>
