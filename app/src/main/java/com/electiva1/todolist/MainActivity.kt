@@ -8,7 +8,9 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.view.View
 import android.widget.AdapterView
-import java.util.ArrayList
+import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,10 +23,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        leerArchivo()
+
         tareas = ArrayList()
-        tareas!!.add("marcos : 43734843")
-        tareas!!.add("luis : 6554343")
-        tareas!!.add("ana : 7445434")
         adaptador1 = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tareas!!)
         lv1 = findViewById(R.id.listView) as ListView
         lv1!!.adapter = adaptador1
@@ -47,9 +48,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun leerArchivo(){
+        val scan = Scanner(
+            getResources().openRawResource(R.raw.tareas))
+
+        var allText = ""
+        while (scan.hasNextLine()) {
+            val line = scan.nextLine()
+            allText += line
+        }
+        scan.close()
+        
+    }
+
+
     fun agregar(v: View) {
         tareas!!.add(et1!!.text.toString())
         adaptador1!!.notifyDataSetChanged()
         et1!!.setText("")
+
     }
+
+
 }
