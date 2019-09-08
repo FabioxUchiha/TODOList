@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.view.View
 import android.widget.AdapterView
-import kotlinx.android.synthetic.main.activity_main.*
+import java.io.PrintStream
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -51,14 +51,14 @@ class MainActivity : AppCompatActivity() {
     fun leerArchivo(){
         val scan = Scanner(
             getResources().openRawResource(R.raw.tareas))
-
+// read entire file
         var allText = ""
         while (scan.hasNextLine()) {
             val line = scan.nextLine()
             allText += line
         }
         scan.close()
-        
+        //tareas!!.add(allText.toString())
     }
 
 
@@ -66,6 +66,21 @@ class MainActivity : AppCompatActivity() {
         tareas!!.add(et1!!.text.toString())
         adaptador1!!.notifyDataSetChanged()
         et1!!.setText("")
+
+        val output = PrintStream(
+            openFileOutput("out.txt", MODE_PRIVATE))
+        output.println("Hello, world!")
+        output.println("How are you?")
+        output.close()
+
+        val scan = Scanner(openFileInput("tareas.txt"))
+        var allText = "" // read entire file
+        while (scan.hasNextLine()) {
+            val line = scan.nextLine()
+            allText += line
+        }
+        tareas!!.add(allText)
+        scan.close()
 
     }
 
