@@ -23,8 +23,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        leerArchivo()
-
         tareas = ArrayList()
         adaptador1 = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tareas!!)
         lv1 = findViewById(R.id.listView) as ListView
@@ -40,25 +38,29 @@ class MainActivity : AppCompatActivity() {
             dialogo1.setPositiveButton("Confirmar") { dialogo1, id ->
                 tareas!!.removeAt(i)
                 adaptador1!!.notifyDataSetChanged()
+
             }
             dialogo1.setNegativeButton("Cancelar") { dialogo1, id -> }
             dialogo1.show()
 
             false
         }
+
+        leerArchivo()
+
     }
 
     fun leerArchivo(){
         val scan = Scanner(
             getResources().openRawResource(R.raw.tareas))
-// read entire file
         var allText = ""
         while (scan.hasNextLine()) {
             val line = scan.nextLine()
             allText += line
+            tareas!!.add(allText)
         }
         scan.close()
-        //tareas!!.add(allText.toString())
+        adaptador1!!.notifyDataSetChanged()
     }
 
 
@@ -67,21 +69,17 @@ class MainActivity : AppCompatActivity() {
         adaptador1!!.notifyDataSetChanged()
         et1!!.setText("")
 
-        val output = PrintStream(
-            openFileOutput("out.txt", MODE_PRIVATE))
-        output.println("Hello, world!")
-        output.println("How are you?")
-        output.close()
+        val output = PrintStream(openFileOutput("tareas.txt", MODE_PRIVATE))
 
         val scan = Scanner(openFileInput("tareas.txt"))
-        var allText = "" // read entire file
+        var allText = ""
         while (scan.hasNextLine()) {
             val line = scan.nextLine()
             allText += line
         }
         tareas!!.add(allText)
         scan.close()
-
+        adaptador1!!.notifyDataSetChanged()
     }
 
 
