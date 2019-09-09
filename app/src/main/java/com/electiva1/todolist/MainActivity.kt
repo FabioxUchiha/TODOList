@@ -1,14 +1,13 @@
 package com.electiva1.todolist
 
 import android.app.AlertDialog
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.EditText
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import android.view.View
-import android.widget.AdapterView
-import java.io.PrintStream
+import android.widget.*
+import java.io.OutputStreamWriter
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -45,16 +44,14 @@ class MainActivity : AppCompatActivity() {
 
             false
         }
-
         leerArchivo()
-
     }
 
     fun leerArchivo(){
-        val scan = Scanner(
-            getResources().openRawResource(R.raw.tareas))
-        var allText = ""
+        val scan = Scanner(getResources().openRawResource(R.raw.tareas))
+
         while (scan.hasNextLine()) {
+            var allText = ""
             val line = scan.nextLine()
             allText += line
             tareas!!.add(allText)
@@ -64,23 +61,25 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun agregar(v: View) {
+    fun agregar(view: View) {
         tareas!!.add(et1!!.text.toString())
         adaptador1!!.notifyDataSetChanged()
-        et1!!.setText("")
+        try {
+            val fileOutputStream = openFileOutput("tareas.txt", Context.MODE_PRIVATE)
+            for (i in tareas!!.indices){
+                val outputStreamWriter = OutputStreamWriter(fileOutputStream)
+                outputStreamWriter.write(et1!!.text.toString())
+                outputStreamWriter.close()
+                Toast.makeText(applicationContext,"archivo guardado",Toast.LENGTH_SHORT).show()
+                et1!!.setText("")
+            }
 
-        val output = PrintStream(openFileOutput("tareas.txt", MODE_PRIVATE))
 
-        val scan = Scanner(openFileInput("tareas.txt"))
-        var allText = ""
-        while (scan.hasNextLine()) {
-            val line = scan.nextLine()
-            allText += line
         }
-        tareas!!.add(allText)
-        scan.close()
-        adaptador1!!.notifyDataSetChanged()
+        catch (exp: Exception){
+            exp.printStackTrace()
+        }
+
+
     }
-
-
 }
